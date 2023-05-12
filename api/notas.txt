@@ -1,0 +1,20 @@
+- Conseguir que las actividades(detail) muestren los países asociados;
+
+
+rutas-front: 
+    - title
+    - countries
+    - actividades
+    - 
+
+
+
+    
+<Country 
+                problem={"kaka"}
+                key={country?.id}
+                // id={country.id}
+                name={country?.name}
+                flag={country?.flag}
+                continent={country?.continent}
+            />
