@@ -1,4 +1,5 @@
 const {Activity} = require("../../db");
+const findAllActivities = require("../finders/findAllActivities")
 
 module.exports = createNewActivity = async(name, difficulty, duration, season, countries)=>{
     const newActivity = await Activity.create({
@@ -7,8 +8,7 @@ module.exports = createNewActivity = async(name, difficulty, duration, season, c
         duration: duration,
         season: season
     });
-    console.log(countries)
     await newActivity.setCountries(countries);
 
-    return newActivity;
+    return await findAllActivities();
 }

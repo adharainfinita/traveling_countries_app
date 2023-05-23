@@ -1,17 +1,19 @@
 // const {Activity} = require("../db");
-const findActivitiesByName = require("../finders/findActivitiesByName");
+const findActivitiesByID = require("../finders/findActivityByID");
+const findAllActivities = require("../finders/findAllActivities");
 
-module.exports = updateActivityByName = async(name, newName, difficulty, duration,season, countries)=>{
-    const myActivity = await findActivitiesByName(name);
+module.exports = updateActivity = async(id, newName, difficulty, duration,season, countries)=>{
+    const myActivity = await findActivitiesByID(id);
 
     myActivity.update({
         name: newName,
         difficulty: difficulty,
         duration: duration,
-        season: season
+        season: season,
     });
-    console.log(myActivity);
+    
     await myActivity.setCountries(countries);
-    return await myActivity.save();
+    
+    return await findAllActivities();
 
 }

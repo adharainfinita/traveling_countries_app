@@ -5,7 +5,10 @@ const createAllCountries = require("../../controllers/creates/createAllCountries
 const getAllCountries= async(req, res)=>{
         try {
             const dbCountries = await createAllCountries();
-            return res.status(201).json(dbCountries);
+            console.log(dbCountries);
+            if(dbCountries){
+                return res.status(201).json(dbCountries);
+            }
         } 
         catch (error) {
             res.status(500).json({error: error.message})

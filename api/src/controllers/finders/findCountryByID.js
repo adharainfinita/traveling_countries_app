@@ -1,8 +1,8 @@
 const {Country, Activity} = require ("../../db");
-const {Op} = require("sequelize")
+// const {Op} = require("sequelize")
 
 module.exports = findCountryByID = async(id)=>{
-    const foundCountry = await Country.findOne({
+    return await Country.findOne({
         where: {
             id: id
         }
@@ -13,6 +13,4 @@ module.exports = findCountryByID = async(id)=>{
             through: {attributes: []}
         }
     });
-    
-    return foundCountry;
 }

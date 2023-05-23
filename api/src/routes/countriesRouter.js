@@ -5,8 +5,8 @@ const {getCountryByID} = require("../handlers/getters/getCountryByID")
 const {getCountryByName} = require("../handlers/getters/getCountryByName");
 
 
-countriesRouter.get("/name?", getCountryByName)
 
+countriesRouter.get("/name", getCountryByName)
 countriesRouter.get("/:id", getCountryByID);
 
 

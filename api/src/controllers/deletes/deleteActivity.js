@@ -1,8 +1,9 @@
-const foundActivity = require("../finders/findActivitiesByName")
+const foundActivity = require("../finders/findActivityByID");
+const findAllActivities = require("../finders/findAllActivities");
 
 
-module.exports = deleteActivity = async(name)=>{
-    const myActivity = await foundActivity(name);
-
+module.exports = deleteActivity = async(id)=>{
+    const myActivity = await foundActivity(id);
     myActivity.destroy();
+    return await findAllActivities();
 }

@@ -1,35 +1,35 @@
-
-
 import { useSelector } from "react-redux";
 import { Pagination } from "./Pagination";
 import Country from "./Country.jsx";
-
+import styles from "../styles/Countries.module.css"
 
 
 
 const Countries = () => {
-    const countriesStore = useSelector(state => state.countries);
+    const {countries, interruptor} = useSelector(state => state);
     const pageNow = useSelector(state => state.page);
+    
+    const from = (pageNow - 1) * 10;
+    const to = pageNow * 10;
+    let pagesStack = Math.floor(countries?.length / 5) / 2;
+    let countriesForPage = countries?.slice(from, to)
+    
+    const verifyCountries = countriesForPage?.map(country => {
+        return (
+            <Country 
+            key={country?.id}
+            id={country?.id}
+            name={country?.name}
+            flag={country?.flag}
+            continent={country?.continent}
+            />
+        )     
+        })
 
-    const from = (pageNow - 1) * 7;
-    const to = pageNow * 7;
-    let verifyCountries = countriesStore[0];
-    let pagesStack = Math.floor(verifyCountries?.length / 6);
-    let countriesForPage = verifyCountries?.slice(from, to);
     return (
         <div>
-            <div>{
-                countriesForPage.map(country => {
-                return (
-                    <Country 
-                    key={country?.id}
-                    id={country?.id}
-                    name={country?.name}
-                    flag={country?.flag}
-                    continent={country?.continent}
-                    />
-                )     
-                })}
+            <div className={ interruptor ? styles.containerSide : styles.container}>
+                {verifyCountries}
             </div>
             <Pagination pagesStack={pagesStack} />
         </div>

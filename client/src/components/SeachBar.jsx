@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "../styles/SearchBar.css";
+import styles from "../styles/SearchBar.module.css";
 import { useDispatch } from "react-redux";
 import { getCountryByName, resetCountries } from "../redux/actions";
 
@@ -17,12 +17,13 @@ const SearchBar = () => {
     }
 
     return(
-        <div className="float-bar">
-            <input type="search" placeholder="write" onChange={handleChange} value={name}></input>
-            <button onClick={()=> {
+        <div >
+            <input className={styles.search} type="search" placeholder="Busca un país" onChange={handleChange} value={name}></input>
+            <button className={styles.buttons} onClick={()=> {
                 onSearch(name);
-            }}>Buscar</button>
-            <button onClick={reset}>reset</button>
+                setName("");
+            }}>BUSCAR</button>
+            <button className={styles.buttons} onClick={reset}>REINICIAR</button>
         </div>
     )
 }

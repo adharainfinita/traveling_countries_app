@@ -1,32 +1,49 @@
 import {Link} from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import SearchBar from "./SeachBar";
-import "../styles/Nav.css"
+import { useDispatch, useSelector } from "react-redux";
+import styles from  "../styles/Nav.module.css"
+import { deployTheSideBar } from "../redux/actions.js";
 
 const Nav = () => {
     const location = useLocation();
+    const dispatch = useDispatch();
+    const {interruptor} = useSelector(state => state)
 
+    const handleSideBar = ()=>{
+        dispatch(deployTheSideBar());
+    }
 
     return(
-        <div className="Nav">
-            <h1>Traveling Countries</h1>
+        <div className={styles.Nav}>
+            <button onClick={handleSideBar} className={ interruptor ? styles.optionsEnable : styles.options}>
+                <img className={styles.image}
+                src="https://cdn.icon-icons.com/icons2/1673/PNG/512/options2outline_110906.png"
+                alt="" />
+            </button>
+            
+            <h1 className={styles.title} >Traveling Countries</h1>
             <div>
-                <button className="btn"><Link className="link" to="/">Log out</Link></button> 
-            <SearchBar/>
-            { location.pathname === "/activities" 
-                    ? <button className="btnHere">
-                        <Link className="link" to="/activities">Activities</Link>
+                    <button className={ location.pathname === "/activities" 
+                    ? styles.btnHere : styles.btn}>
+                        <Link className={styles.link} to="/activities">
+                            <img className={styles.image}
+                            src="https://cdn-icons-png.flaticon.com/512/5029/5029158.png" 
+                            alt="map" />
+                            Activities
+                        </Link>
                     </button>
-                    : <button className="btn">
-                        <Link className="link" to="/activities">Activities</Link>
+                    <button className={ location.pathname === "/countries"? styles.btnHere : styles.btn}>
+                        <Link className={styles.link} to="/countries" >
+                        <img className={styles.image}
+                            src="https://cdn-icons-png.flaticon.com/512/6618/6618280.png"
+                            alt="gps" />
+                        Countries</Link>
                     </button>
-            }
-            { location.pathname === "/countries" 
-                    ? <button className="btnHere"><Link className="link" to="/countries" >Countries</Link>
-                    </button>
-                    : <button className="btn"><Link className="link" to="/countries" >Countries</Link>
-                    </button>
-            }
+            <button className={styles.btn}><Link className={styles.link} to="/">
+                <img className={styles.image}
+                        src="https://cdn-icons-png.flaticon.com/512/1666/1666297.png"
+                        alt="" />
+                    Log out</Link></button> 
             </div>
         </div>
     )

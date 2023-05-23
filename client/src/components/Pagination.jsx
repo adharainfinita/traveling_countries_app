@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux"
-
+import styles from "../styles/Pagination.module.css"
 import { nextPage, prevPage } from "../redux/actions";
 
 export const Pagination = ({pagesStack}) =>{
@@ -9,27 +9,18 @@ export const Pagination = ({pagesStack}) =>{
     const next =()=> dispatch(nextPage());
     const prev=()=> dispatch(prevPage());
 
-    console.log(numPage);
-    console.log(pagesStack);
+
 
     return (
-        <div className="pagination">
-        {
-            numPage > 1 ? 
-            <div>
-                <button onClick={prev}>PREV</button>
-                <p>{numPage-1}</p>
-            </div>
-            :null
-        }
-        {
-            numPage < pagesStack ?(
-            <div>
-                <p>{numPage+1}</p>
-                <button onClick={next}>NEXT</button>
-            </div>)
-            :null
-        }
+        <div className={styles.container}>
+        {numPage > 1 
+            ?<button className={styles.buttons} onClick={prev}>ANTERIOR</button>
+            :null}
+            <p className={styles.text}>Página {numPage} de {pagesStack}</p>
+            {numPage < pagesStack 
+            ?<button className={styles.buttons} onClick={next}>SIGUIENTE</button>
+            :null}
+        
         </div>
     )
 }

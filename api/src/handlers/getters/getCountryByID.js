@@ -4,8 +4,7 @@ const getCountryByID =async(req, res)=>{
     const {id}= req.params;
 
     if(id.length !== 3) throw Error ("El ID debe ser 3 caracteres");
-    // if(typeof Number(id) === "number") throw Error("El ID -NO- es un numero. Pruebe usando siglas");
-    console.log(id);
+
     try {
         const countryFound = await findCountryByID(id);
         if(countryFound) return res.status(200).json(countryFound);
