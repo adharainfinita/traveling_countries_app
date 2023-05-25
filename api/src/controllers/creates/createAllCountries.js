@@ -3,7 +3,6 @@ const {Country, Activity} = require("../../db.js");
 
 
 module.exports = createAllCountries =async()=>{
-    
     const allCountries = await Country.findAll({
         where:{},include: {
             model: Activity,
@@ -11,8 +10,8 @@ module.exports = createAllCountries =async()=>{
             through: {attributes: []}
         }
     }); 
-    if (allCountries.length) return allCountries
-    return await Country.bulkCreate(await getApidata())    
+    if (allCountries.length) return allCountries;
+    return await Country.bulkCreate(await getApidata());    
 }
 
 // 

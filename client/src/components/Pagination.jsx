@@ -16,7 +16,7 @@ export const Pagination = ({pagesStack}) =>{
         {numPage > 1 
             ?<button className={styles.buttons} onClick={prev}>ANTERIOR</button>
             :null}
-            <p className={styles.text}>Página {numPage} de {pagesStack}</p>
+            <p className={styles.text}>Página {numPage} de {Math.ceil(pagesStack)}</p>
             {numPage < pagesStack 
             ?<button className={styles.buttons} onClick={next}>SIGUIENTE</button>
             :null}

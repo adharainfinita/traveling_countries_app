@@ -17,6 +17,9 @@ function validate(data){
     if(!data.season){
         tempErrors.season = "Elige una estación";
     }
+    if(!data.countries){
+        tempErrors.countries = "No existe el país elegido";
+    }
     return tempErrors;
 }
 export default validate;

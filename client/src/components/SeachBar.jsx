@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styles from "../styles/SearchBar.module.css";
 import { useDispatch } from "react-redux";
-import { getCountryByName, resetCountries } from "../redux/actions";
+import { getCountryByName, getCountries } from "../redux/actions";
 
 const SearchBar = () => {
     const dispatch = useDispatch();
@@ -13,7 +13,7 @@ const SearchBar = () => {
         dispatch(getCountryByName(name))
     }
     const reset = ()=>{
-        dispatch(resetCountries())
+        dispatch(getCountries())
     }
 
     return(

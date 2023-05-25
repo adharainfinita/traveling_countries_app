@@ -1,18 +1,22 @@
 import { ADD_COUNTRIES, NEXT_PAGE, PREV_PAGE, GET_COUNTRY_DETAIL, CLEAN_COUNTRY_DETAIL,
-SEARCH_COUNTRY, RESET_COUNTRIES, ORDER_COUNTRIES, FILTER_COUNTRIES, GET_ACTIVITIES,
-POST_ACTIVITY, GET_ACTIVITY_DETAIL, CLEAN_ACTIVITY, EDIT_ACTIVITY, INTERRUPTOR, DELETE_ACTIVITY
+SEARCH_COUNTRY, ORDER_COUNTRIES, FILTER_COUNTRIES, GET_ACTIVITIES,
+POST_ACTIVITY, GET_ACTIVITY_DETAIL, CLEAN_ACTIVITY, EDIT_ACTIVITY, INTERRUPTOR, DELETE_ACTIVITY,
 } from "./action-types";
 import axios from "axios";
 import {URL_BASE, URL_ACTIVITIES} from "../utils/api";
 import notFound from "../utils/notFound";
 
+
 export const getCountries = () =>{
     return async function(dispatch){
         try {
-            const {data} = await axios(URL_BASE);
-            return dispatch({type: ADD_COUNTRIES, payload: data})
+            const response = await axios(URL_BASE);
+            return dispatch({type: ADD_COUNTRIES, payload: response.data})
         } catch (error) {
-            alert(error.message);
+            const errorMessage = error.response
+            ? error.response.data.error
+            : error.message;
+            alert(errorMessage);
         }
     }
 }
@@ -35,7 +39,10 @@ export const getCountryDetail=(id)=>{
             const {data} = await axios(`${URL_BASE}/${id}`);
             return dispatch({type:GET_COUNTRY_DETAIL, payload: data})
         } catch (error) {
-            alert(error.message);
+            const errorMessage = error.response
+            ? error.response.data.error
+            : error.message;
+            alert(errorMessage);
         }
         
     }
@@ -50,21 +57,15 @@ export const getCountryByName = (name)=>{
         try {
             if(!name) throw Error("No has escrito nada!");
             const {data} = await axios(`${URL_BASE}/name?name=${name}`);
-            if(typeof data === "object"){
-                return dispatch({type: SEARCH_COUNTRY,payload: data})
-            }
-            else {
-                alert("No hay países con ese nombre. Prueba de nuevo esribiendo las primeras letra, o buscalo en las opciones disponibles")
-                return dispatch({type: SEARCH_COUNTRY,payload: notFound})
-            }
+            return dispatch({type: SEARCH_COUNTRY,payload: data})
         } catch (error) {
-            alert(error.message);
+            const errorMessage = error.response
+            ? error.response.data.error
+            : error.message;
+            alert(errorMessage);
+            return dispatch({type: SEARCH_COUNTRY,payload: notFound})
         }
     }
-}
-
-export const resetCountries = () => {
-    return { type: RESET_COUNTRIES}
 }
 
 export const orderCountries =(value)=>{
@@ -84,7 +85,10 @@ export const getAllActivities = ()=>{
             }
             return alert("No hay actividades disponisbles")
         } catch (error) {
-            alert(error.message);
+            const errorMessage = error.response
+            ? error.response.data.error
+            : error.message;
+            alert(errorMessage);
         }
     }
 }
@@ -101,7 +105,10 @@ export const postActivity = ({name, difficulty, duration, season, countries}) =>
             });
             return dispatch({type: POST_ACTIVITY, payload: data})
         } catch (error) {
-            alert(error.message);
+            const errorMessage = error.response
+            ? error.response.data.error
+            : error.message;
+            alert(errorMessage);
         }
     }
 }
@@ -112,7 +119,10 @@ export const getActivityByID = (id)=>{
             const {data} = await axios(`${URL_ACTIVITIES}/${id}`);
             return dispatch({type:GET_ACTIVITY_DETAIL, payload: data})
         } catch (error) {
-            alert(error.message);
+            const errorMessage = error.response
+            ? error.response.data.error
+            : error.message;
+            alert(errorMessage);
         }
     }
 }
@@ -131,10 +141,12 @@ export const updateActivity = ({id, name, difficulty, duration, season,countries
                 season: season,
                 countries: countries
             });
-            if(!data) throw Error("No hubo respuesta exitosa")
             return dispatch({type:EDIT_ACTIVITY, payload: data})
         } catch (error) {
-            alert(error.message);
+            const errorMessage = error.response
+            ? error.response.data.error
+            : error.message;
+            alert(errorMessage);
         }
     }
 }

@@ -1,14 +1,11 @@
 import { useSelector } from "react-redux";
 import { Pagination } from "./Pagination";
 import Country from "./Country.jsx";
-import styles from "../styles/Countries.module.css"
-
-
+import styles from "../styles/Countries.module.css";
 
 const Countries = () => {
     const {countries, interruptor} = useSelector(state => state);
     const pageNow = useSelector(state => state.page);
-    
     const from = (pageNow - 1) * 10;
     const to = pageNow * 10;
     let pagesStack = Math.floor(countries?.length / 5) / 2;

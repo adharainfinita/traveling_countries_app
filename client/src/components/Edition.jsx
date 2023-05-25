@@ -41,50 +41,51 @@ const Edition = () =>{
             })
         )
     }
-    const addCountry = () =>{
+    const addCountry = (event) =>{
         let validateCountry = countries.find(country => country.name === newCountry);
+        if(validateCountry){
             setData({
             ...data,
             countries: [...data.countries, validateCountry.id]
             });
             setNewCountry("");
+            setErrors({
+                countries: ""
+            })}
+        else{
+            setErrors(
+                validate({
+                    ...data,
+                    countries: event.target.value
+                })
+            )}
     }
-    const countriesAsociated = activitiesDetail?.countries?.map(match =>{
-        return (
-            <div key={match.id}>
-                <input type="text" name="countries" className={styles.input} defaultValue={match.name}/>
-                <button type="button" className={styles.buttons} onClick={addCountry}>
-                    Volver a Agregar</button>
-            </div>
-        )
+    const countriesAsociated = activitiesDetail?.countries?.map((match, index) =>{
+        return <option key={index} value={match.name}>{match.name}</option>
     })
-    const listCountries = countries.map(country =>{
-        return (
-            <option value={country.name}>{country.name}</option>
-        )
+    const listCountries = countries.map((country, index) =>{
+        return<option key={index} value={country.name}>{country.name}</option> 
     })
-
-    const cancelButton =()=>{
-        navigate("/loading");
-    }
-
+    const cancelButton =()=>navigate("/loading");
+    
     const handleSubmit = (event) =>{
         event.preventDefault();
         try {
             dispatch(updateActivity(data));
             navigate("/loading");
+            alert("Actividad modificada👍")
         } catch (error) {
             alert(error.message);
         }
     }
-console.log(data);
     return (
         <div>
             <section className={styles.dataPreview}>
-                <p>{activitiesDetail?.name}</p>
-                <p>{activitiesDetail?.difficulty}</p>
-                <p>{activitiesDetail?.duration}</p>
-                <p>{activitiesDetail?.season}</p>
+                <p>{data.name}</p>
+                <p>{data.difficulty}</p>
+                <p>{data.duration}</p>
+                <p>{data.season}</p>
+                <p>{data.countries}</p>
             </section>
 
             <form className={styles.form} onSubmit={handleSubmit}>
@@ -112,7 +113,7 @@ console.log(data);
                     {errors.duration && <p className={styles.errors}>{errors.duration}</p>}
 
                     <label className={styles.label} htmlFor="season" >Estación:</label>
-                    <select name="season" id="" defaultValue={activitiesDetail.season} 
+                    <select name="season" defaultValue={activitiesDetail.season} 
                         onChange={handleOnChange}>
                             <option value="Summer">Summer</option>
                             <option value="Autum">Autum</option>
@@ -124,20 +125,31 @@ console.log(data);
 
                 <section  className={styles.asociatedCountries}>
                     <label className={styles.label} htmlFor="countries">Países asociados</label>
-                    {countriesAsociated}
-                    <select name="countries" onChange={(event) => setNewCountry(event.target.value)}>
+                    <select className={styles.selects} name="countries" defaultValue="chimichangas" onChange={(event) => setNewCountry(event.target.value)}>
+                        <option value="chimichangas">Elija el país</option>
+                        {countriesAsociated}
+                    </select>
+                    <button type="button" className={styles.buttons} onClick={addCountry}>
+                    Volver a Agregar</button>
+                    <select className={styles.selects} name="countries" onChange={(event) => setNewCountry(event.target.value)}>
+                        <option value="chimichangas" >Elija el país</option>
                         {listCountries}
                     </select>
                     <button type="button" className={styles.buttons} onClick={addCountry}>
                         Agregar otro país</button>
                     {errors.countries && <p className={styles.errors}>{errors.countries} </p>}
-                </section>
                     <div className={styles.countries}>{data.countries.length} países agregados</div>
+                </section>
                 <section>
                     <button
-                    className={styles.buttonSubmit}
+                    className={Object.values(errors).every((value) => value === "") ? styles.buttonSubmit : styles.buttons}
                     type="button"
                     onClick={handleSubmit}
+                    disabled={
+                        !Object.values(errors).every((value) => value === "") 
+                        || !data.name || !data.difficulty || !data.duration
+                        || !data.season || !data.countries.length
+                    }
                     >Finalizar edición</button>
                 </section>
             </form>

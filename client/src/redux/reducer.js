@@ -1,6 +1,6 @@
 import { 
     ADD_COUNTRIES, NEXT_PAGE, PREV_PAGE, GET_COUNTRY_DETAIL, 
-    CLEAN_COUNTRY_DETAIL, SEARCH_COUNTRY, RESET_COUNTRIES, 
+    CLEAN_COUNTRY_DETAIL, SEARCH_COUNTRY,
     FILTER_COUNTRIES, ORDER_COUNTRIES, GET_ACTIVITIES, POST_ACTIVITY,
     GET_ACTIVITY_DETAIL, EDIT_ACTIVITY, INTERRUPTOR, CLEAN_ACTIVITY, DELETE_ACTIVITY
     } from "./action-types";
@@ -17,7 +17,6 @@ const initialState = {
 
 const reducer = (state = initialState, action)=>{
     switch(action.type){
-
         case ADD_COUNTRIES:{
             return {
                 ...state,
@@ -56,13 +55,6 @@ const reducer = (state = initialState, action)=>{
             }
         }
 
-        case RESET_COUNTRIES:{
-            return {
-                ...state,
-                countries: [...state.countriesOrigin]
-            }
-        }
-
         case ORDER_COUNTRIES:{
             const countriesCopy = [...state.countries];
             if(action.payload.length ===3){
@@ -87,25 +79,25 @@ const reducer = (state = initialState, action)=>{
             }
             return{
                 ...state,
-                countries: countriesCopy
+                countries: countriesCopy,
+                countriesOrigin: countriesCopy
             }
         }
         
         case FILTER_COUNTRIES:{
-            let countriesFound = [...state.countriesOrigin];
+            let countriesFound = [];
             if(action.payload.includes("*")){
                 action.payload = action.payload.split("*").join("");
                 countriesFound = state.countriesOrigin.filter(country=> country.subregion === action.payload);
-                if(action.payload === "All" && !countriesFound.length) countriesFound = [...state.countriesOrigin]
             }
             if(action.payload === "ACT"){
                 countriesFound = state.countriesOrigin.filter(country => country.activities.length);
             }
             if(action.payload.includes("/")){
-                action.payload = action.payload.split("/").join("")
-                countriesFound  = state.countriesOrigin.filter(country=> country.continent === action.payload)
-                if(action.payload === "All" && !countriesFound.length) countriesFound = [...state.countriesOrigin]
+                action.payload = action.payload.split("/").join("");
+                countriesFound = state.countriesOrigin.filter(country=> country.continent === action.payload)
             }
+            if(action.payload === "All") countriesFound = [...state.countriesOrigin];
             return {
                 ...state,
                 countries: countriesFound

@@ -18,6 +18,6 @@ module.exports = getApidata =async()=>{
                 population: country.population,
             }
         });
-        
-        return countryMap;
+        if(countryMap.length)return countryMap;
+        throw Error("Hubo un problema con la api")
 }

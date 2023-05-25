@@ -28,12 +28,16 @@ const Form = () => {
         countries: ""
     })
 
-const handleOnChange = (event) =>{
+    const listCountries = countries.map((country, index) =>{
+        return (
+            <option key={index} value={country.name}>{country.name}</option>
+        )
+    })
+    const handleOnChange = (event) =>{
     setActivityData({
         ...activityData,
         [event.target.name]: event.target.value
     });
-
     setErrors(
         validate({
             ...activityData,
@@ -41,7 +45,7 @@ const handleOnChange = (event) =>{
         })
     )
 }
-const addCountry = () =>{
+const addCountry = (event) =>{
     let validateCountry = countries.find(country => country.name === newCountry);
     if(validateCountry){
         setActivityData({
@@ -49,24 +53,28 @@ const addCountry = () =>{
         countries: [...activityData.countries, validateCountry.id]
         });
         setNewCountry("");
+        setErrors({countries: ""});
     }
     else{
-        setErrors({
-        ...errors,
-        countries: "No existe el país elegido"
-    })
-    }
+        setErrors(
+            validate({
+                ...activityData,
+                countries: event.target.value
+            })
+    )}
 }
-const cancelForm = () =>{
-    navigate("/loading");
-}
+const cancelForm = () =>navigate("/loading");
+
 const handleSubmit = (event) =>{
     event.preventDefault();
-    dispatch(postActivity(activityData));
+    try {
+        dispatch(postActivity(activityData));
     navigate("/loading");
-    alert("Actividad creada con éxito")
+    alert("Actividad creada con éxito👌")
+    } catch (error) {
+        alert(error.message)
+    }
 }
-
     return (
         <form className={styles.form} onSubmit={handleSubmit}>
             <button className={styles.cancel} onClick={cancelForm} >X</button>
@@ -81,13 +89,9 @@ const handleSubmit = (event) =>{
                 type="text" 
                 placeholder="Ingrese el nombre de la actividad"
                 onChange={handleOnChange}
-                // value={activityData.name}
                 />
                 </div>
                 {errors.name && <p className={styles.errors}>{errors.name}</p>}
-            </section>
-
-            <section className={styles.sections}>
                 <h4 className={styles.titles}>Dificultad:</h4>
                 <div className={styles.selections}>
                 <label htmlFor="difficulty" className={styles.label}>Elige la dificultad de la actividad:</label>
@@ -101,9 +105,7 @@ const handleSubmit = (event) =>{
                 </div>
                 
                 {errors.difficulty && <p className={styles.errors}>{errors.difficulty}</p>}
-            </section>
-
-            <section className={styles.sections}>
+            
                 <h4 className={styles.titles}>Duración</h4>
                 <div className={styles.selections}>
                 <label htmlFor="duration" className={styles.label}>Elige el tiempo que durará
@@ -116,8 +118,6 @@ const handleSubmit = (event) =>{
                 </div>
                 
                 {errors.duration && <p className={styles.errors}>{errors.duration}</p>}
-            </section>
-            <section className={styles.sections}>
                 <h4 className={styles.titles}>Estación</h4>
                 <div className={styles.selections}>
                 <label htmlFor="season" className={styles.label}>Elige una de las 4 estaciones</label>
@@ -134,21 +134,14 @@ const handleSubmit = (event) =>{
                     <input type="radio" name="season" onChange={handleOnChange} value="Spring"/>Spring
                 </label>
                 </div>
-                
                 {errors.season && <p className={styles.errors}>{errors.season}</p>}
-            </section>
-            <section className={styles.sections}>
                 <h4 className={styles.titles}>Países anfitriones</h4>
                 <div className={styles.selections}>
-                    <label htmlFor="countries" className={styles.label}>¿En qué países tendrá lugar la actividad?</label>
-                <input 
-                className={styles.input}
-                type="text" 
-                name="countries" 
-                placeholder="Elije un país"
-                value={newCountry}
-                onChange={(event) => setNewCountry(event.target.value)}
-                />
+                <label htmlFor="countries" className={styles.label}>¿En qué países tendrá lugar la actividad?</label>
+                <select className={styles.selects} name="countries" onChange={(event) => setNewCountry(event.target.value)}>
+                        <option value="chimichangas" >Elija el país</option>
+                        {listCountries}
+                    </select>
                 <button
                 className={styles.buttons}
                 type="button"
@@ -160,15 +153,15 @@ const handleSubmit = (event) =>{
             </section>
 
             <button
-            className={styles.buttonSubmit}
+            className={ Object.values(errors).every((value) => value === "") ? styles.buttonSubmit : styles.buttons}
             type="button"
             onClick={handleSubmit}
             disabled={
                 !Object.values(errors).every((value) => value === "") 
                 || !activityData.name || !activityData.difficulty || !activityData.duration
-                || !activityData.season
+                || !activityData.season || !activityData.countries.length
             }>
-                Crear Actividad
+                CREAR ACTIVIDAD
             </button>
         </form>
     )
