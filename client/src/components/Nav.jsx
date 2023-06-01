@@ -2,7 +2,7 @@ import {Link} from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styles from  "../styles/Nav.module.css"
-import { deployTheSideBar } from "../redux/actions.js";
+import { deployTheSideBar, logout } from "../redux/actions.js";
 
 const Nav = () => {
     const location = useLocation();
@@ -11,6 +11,9 @@ const Nav = () => {
 
     const handleSideBar = ()=>{
         dispatch(deployTheSideBar());
+    }
+    const logOut =()=>{
+        dispatch(logout())
     }
 
     return(
@@ -39,7 +42,7 @@ const Nav = () => {
                             alt="gps" />
                         Countries</Link>
                     </button>
-            <button className={styles.btn}><Link className={styles.link} to="/">
+            <button className={styles.btn} onClick={logOut}><Link className={styles.link} to="/">
                 <img className={styles.image}
                         src="https://cdn-icons-png.flaticon.com/512/1666/1666297.png"
                         alt="" />

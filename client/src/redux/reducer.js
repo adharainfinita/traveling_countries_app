@@ -2,7 +2,7 @@ import {
     ADD_COUNTRIES, NEXT_PAGE, PREV_PAGE, GET_COUNTRY_DETAIL, 
     CLEAN_COUNTRY_DETAIL, SEARCH_COUNTRY,
     FILTER_COUNTRIES, ORDER_COUNTRIES, GET_ACTIVITIES, POST_ACTIVITY,
-    GET_ACTIVITY_DETAIL, EDIT_ACTIVITY, INTERRUPTOR, CLEAN_ACTIVITY, DELETE_ACTIVITY
+    GET_ACTIVITY_DETAIL, EDIT_ACTIVITY, INTERRUPTOR, CLEAN_ACTIVITY, DELETE_ACTIVITY, LOGIN, POST_USER, GET_USERS_DATA, LOGOUT
     } from "./action-types";
 
 const initialState = {
@@ -12,7 +12,9 @@ const initialState = {
     page: 1,
     activities: [],
     activitiesDetail: {},
-    interruptor: false
+    interruptor: false,
+    user: {},
+    users: []
 }
 
 const reducer = (state = initialState, action)=>{
@@ -58,8 +60,8 @@ const reducer = (state = initialState, action)=>{
         case ORDER_COUNTRIES:{
             const countriesCopy = [...state.countries];
             if(action.payload.length ===3){
-                if (action.payload === "MAX") countriesCopy.sort((a, b)=> a.population - b.population)
-                else countriesCopy.sort((a, b)=> b.population - a.population)
+                if (action.payload === "MAX") countriesCopy.sort((a, b)=> b.population - a.population)
+                else countriesCopy.sort((a, b)=> a.population - b.population)
             }
             else {
                 if(action.payload === "A"){
@@ -150,6 +152,32 @@ const reducer = (state = initialState, action)=>{
             return {
                 ...state,
                 activities: action.payload
+            }
+        }
+
+        case LOGIN: {
+            return {
+                ...state,
+                user: action.payload
+            }
+        }
+
+        case POST_USER: {
+            return{
+                ...state,
+                user: action.payload
+            }
+        }
+        case GET_USERS_DATA: {
+            return{
+                ...state,
+                users: action.payload
+            }
+        }
+        case LOGOUT:{
+            return{
+                ...state,
+                user: {}
             }
         }
 

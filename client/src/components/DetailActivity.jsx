@@ -1,13 +1,14 @@
 import {useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { cleanActivityDetail, deleteActivity, getActivityByID } from "../redux/actions";
-import {Link} from "react-router-dom";
+import {useNavigate, Link} from "react-router-dom";
 import styles from "../styles/DetailActivity.module.css";
 
 
-const DetailActivity = ({id}) =>{
+const DetailActivity = ({id, autor}) =>{
     const dispatch = useDispatch();
-    const {activitiesDetail} = useSelector(state => state);
+    const navigate = useNavigate();
+    const {activitiesDetail, user} = useSelector(state => state);
     const [aux, setAux] = useState(false);
 
     useEffect(()=>{
@@ -35,9 +36,18 @@ const DetailActivity = ({id}) =>{
         )
     })
 
+    const handleEdition =()=>{
+        if(user.id === autor){
+            navigate(`/activities/edition/${id}`)
+        }
+        else alert("Esta actividad no es tuya")
+    }
     const handleDelete =()=>{
-        dispatch(deleteActivity(id));
+        if(user.id === autor){
+            dispatch(deleteActivity(id));
         alert("Actividad borrada☠")
+        }
+        else alert("Esta actividad no es tuya")
     }
 
     return (
@@ -45,11 +55,10 @@ const DetailActivity = ({id}) =>{
             <button className={styles.buttonOne} onClick={handleDetail}>
                 Paises asociados</button>
             {aux && countriesAsociated}
-            <button className={styles.buttonTwo} disabled={!aux}> 
-                <Link className={styles.link} to={`/activities/edition/${id}`}>
-                    Editar Actividad</Link> 
+            <button className={styles.buttonTwo} disabled={!aux && !Object.keys(activitiesDetail).length} onClick={handleEdition}> 
+                    Editar Actividad
             </button>
-            <button className={styles.buttonThree} disabled={!aux} onClick={handleDelete}>
+            <button className={styles.buttonThree} disabled={!aux && !Object.keys(activitiesDetail).length} onClick={handleDelete}>
                 Borrar Actividad</button>
         </div>
     )

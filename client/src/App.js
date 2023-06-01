@@ -11,25 +11,32 @@ import Nav from './components/Nav';
 import Form from './components/Form';
 import Edition from './components/Edition';
 import { useSelector } from 'react-redux';
+import Login from './components/Login';
+import Register from './components/Register';
+
 
 function App() {
   
   const {interruptor} = useSelector(state => state);
+  const location = useLocation();
+
   
   const showComponent =()=>{
-    if(location.pathname !== "/" && location.pathname !=="/loading"){
+    if(location.pathname !== "/" && location.pathname !=="/loading" && 
+    location.pathname !== "/login" && location.pathname !== "/login/register"){
       return true
     }
     return false
   }
 
-  const location = useLocation();
 
   return (
     <div className="App">
       {showComponent() && <Nav/>}
       {(interruptor && location.pathname === "/countries") && <SideBar/>}
       <Routes>
+        <Route path='/login' element={<Login/>}/>
+        <Route path='/login/register' element={<Register/>}/>
         <Route path="/" element={<LandingPage/>}/>
         <Route path='/loading' element={<Loading/>} />
         <Route path="/countries" element={<Countries/>}/>

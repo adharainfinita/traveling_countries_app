@@ -8,7 +8,7 @@ import styles from "../styles/Form.module.css";
 
 const Form = () => {
     const dispatch = useDispatch();
-    const {countries} = useSelector(state => state);
+    const {countries, user} = useSelector(state => state);
     const navigate = useNavigate();
 
     const [newCountry, setNewCountry] = useState('');
@@ -17,7 +17,8 @@ const Form = () => {
         difficulty:  0,
         duration: 0,
         season: "",
-        countries: []
+        countries: [],
+        userId: user.id
     });
 
     const [errors, setErrors] = useState({
@@ -28,11 +29,16 @@ const Form = () => {
         countries: ""
     })
 
-    const listCountries = countries.map((country, index) =>{
+    const listCountries = countries.sort((a, b) => {
+        if(a.name < b.name) return -1
+        if(a.name > b.name) return 1;
+        return 0;
+    }).map((country, index) =>{
         return (
             <option key={index} value={country.name}>{country.name}</option>
         )
-    })
+    }); 
+
     const handleOnChange = (event) =>{
     setActivityData({
         ...activityData,
@@ -45,6 +51,7 @@ const Form = () => {
         })
     )
 }
+
 const addCountry = (event) =>{
     let validateCountry = countries.find(country => country.name === newCountry);
     if(validateCountry){
@@ -53,7 +60,12 @@ const addCountry = (event) =>{
         countries: [...activityData.countries, validateCountry.id]
         });
         setNewCountry("");
-        setErrors({countries: ""});
+        setErrors(
+            validate({
+                ...activityData,
+                countries: validateCountry           
+            })
+        )
     }
     else{
         setErrors(

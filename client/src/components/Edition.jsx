@@ -49,9 +49,14 @@ const Edition = () =>{
             countries: [...data.countries, validateCountry.id]
             });
             setNewCountry("");
-            setErrors({
-                countries: ""
-            })}
+            setErrors(
+                validate({
+                    ...data,
+                countries: data.countries.length  
+                })
+                
+            )
+        }
         else{
             setErrors(
                 validate({

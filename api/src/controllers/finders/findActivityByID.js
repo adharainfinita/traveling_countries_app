@@ -1,5 +1,5 @@
 // const { Op } = require("sequelize");
-const {Activity, Country} = require ("../../db");
+const {Activity, Country, User} = require ("../../db");
 
 module.exports = findActivityByID= async(id) =>{
     return await Activity.findOne({
@@ -7,9 +7,10 @@ module.exports = findActivityByID= async(id) =>{
                 id: id
         }, 
             include: {
-            model: Country,
+            model: Country, 
             attributes: ["name", "flag", "capital", "continent","population", "id"],
-            through: {attributes: []}
+            through: {attributes: []},
         }
+
     })
 }

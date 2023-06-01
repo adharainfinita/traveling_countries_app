@@ -14,3 +14,7 @@ export const EDIT_ACTIVITY = "EDIT_ACTIVITY";
 export const INTERRUPTOR = "INTERRUPTOR";
 export const CLEAN_ACTIVITY = "CLEAN_ACTIVITY";
 export const DELETE_ACTIVITY = "DELETE_ACTIVITY";
+export const LOGIN = "LOGIN";
+export const POST_USER = "POST_USER";
+export const GET_USERS_DATA = "GET_USERS_DATA";
+export const LOGOUT = "LOGOUT";

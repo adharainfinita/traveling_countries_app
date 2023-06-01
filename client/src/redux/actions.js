@@ -1,9 +1,9 @@
 import { ADD_COUNTRIES, NEXT_PAGE, PREV_PAGE, GET_COUNTRY_DETAIL, CLEAN_COUNTRY_DETAIL,
 SEARCH_COUNTRY, ORDER_COUNTRIES, FILTER_COUNTRIES, GET_ACTIVITIES,
-POST_ACTIVITY, GET_ACTIVITY_DETAIL, CLEAN_ACTIVITY, EDIT_ACTIVITY, INTERRUPTOR, DELETE_ACTIVITY,
+POST_ACTIVITY, GET_ACTIVITY_DETAIL, CLEAN_ACTIVITY, EDIT_ACTIVITY, INTERRUPTOR, DELETE_ACTIVITY, LOGIN, POST_USER, GET_USERS_DATA, LOGOUT,
 } from "./action-types";
 import axios from "axios";
-import {URL_BASE, URL_ACTIVITIES} from "../utils/api";
+import {URL_BASE, URL_ACTIVITIES, URL_USER} from "../utils/api";
 import notFound from "../utils/notFound";
 
 
@@ -93,15 +93,17 @@ export const getAllActivities = ()=>{
     }
 }
 
-export const postActivity = ({name, difficulty, duration, season, countries}) =>{
+export const postActivity = ({name, difficulty, duration, season, countries, userId}) =>{
     return async function(dispatch){
+        console.log({name, difficulty, duration, season, countries});
         try {
             const {data} = await axios.post(URL_ACTIVITIES, {
                 name: name,
                 difficulty: difficulty,
                 duration: duration,
                 season: season,
-                countries: countries
+                countries: countries,
+                userId: userId
             });
             return dispatch({type: POST_ACTIVITY, payload: data})
         } catch (error) {
@@ -160,4 +162,60 @@ export const deleteActivity = (id) =>{
         const {data} = await axios.delete(`${URL_ACTIVITIES}/${id}`);
         return dispatch({type:DELETE_ACTIVITY, payload: data})
     }
+}
+
+export const login= ({email, password})=>{
+    return async function(dispatch){
+        try{
+            const response = await axios(URL_USER+`?email=${email}&password=${password}`)
+            if(response.data) {
+                return dispatch({type: LOGIN, payload: response.data})
+            }
+        }
+        catch(error){
+            const errorMessage = error.response
+            ? error.response.data.error
+            : error.message;
+            alert(errorMessage);
+        }
+    }
+}
+
+export const createUser = ({name, email, password}) =>{
+    return async function(dispatch){
+        try {
+            if( !email || !password)  throw Error("Faltan datos");
+            const response = await axios.post(URL_USER, {
+                name: name,
+                email: email,
+                password: password,
+            });
+            return dispatch({type: POST_USER, payload: response.data})
+        } catch (error) {
+            const errorMessage = error.response
+            ? error.response.data.error
+            : error.message;
+            alert(errorMessage);
+        }
+    }
+}
+
+export const getAllUsers = () =>{
+    return async function(dispatch){
+        try {
+            const response = await axios("http://localhost:3001/users");
+            if(response.data){
+                return dispatch({type: GET_USERS_DATA, payload: response.data})
+            }
+        } catch (error) {
+            const errorMessage = error.response
+            ? error.response.data.error
+            : error.message;
+            alert(errorMessage);
+        }
+    }
+}
+
+export const logout = ()=>{
+    return {type: LOGOUT}
 }

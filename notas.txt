@@ -1,0 +1,21 @@
+-✔️- Hacer las validaciones del form y darle funcionalidad 
+
+-✔️- Renderizar en detail countries las actividades 
+    (solo queda hacer funcionar el render)
+
+-✔️- Renderizar en detail actividades los paises asociados 
+    (usar la ruta getActivityByName y renderizar allí la prop Countries)
+
+-✔️- En /Activities agregar los boton y frontPath para editar y eliminar
+    actividades (ruta put y delete)
+
+-- SOLUCIONAR LO DE PROCESS IS NOT defined
+
+-✔️- * Corregir las formas de re-agregar paises en Edition
+-✔️- * Actualizar la forma de agregar países en Form
+
+
+EXTRAS
+
+-- Testing :C
+-- Form de registro y dt de Users

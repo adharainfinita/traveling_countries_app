@@ -5,6 +5,7 @@
 
 .info {
     font-weight: lighter;
+    padding: 3px;
 }
 .info :hover {
     font-weight: bolder;
@@ -30,7 +31,7 @@
 
 .link {
     text-decoration: none;
-    color: rgb(45, 44, 44)
+    color: rgb(45, 44, 44);
 }
 
 .buttonThree{
@@ -39,6 +40,6 @@
     border-radius: 5px;
     width: 30%;
     margin: 1%;
-    color:rgb(45, 44, 44);
+    
     font-size: 1vw;
 }
